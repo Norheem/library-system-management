@@ -33,9 +33,8 @@ public class LibraryServiceImpl implements LibraryService {
                 listOfBook = new ArrayList<>();
                 booksList.put(book.getBookTitle(), (List<Book>) listOfBook);
             }
-
             listOfBook.add(book);
-        }
+    }
 
 
 
@@ -46,13 +45,48 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public void implementFIFO(Person person) {
+
+        // Add the person to the FIFO queue
         library.getListUsingFifo().add(person);
+        System.out.println(person.getFirstName() + " " + person.getLastName() + " has been added to the FIFO queue.");
 
-        Iterator<Person> iterator = library.getListUsingFifo().iterator();
+        Queue<Person> queue = (Queue<Person>) library.getListUsingFifo();
+        Person nextPerson = queue.poll();
 
-        while (iterator.hasNext()) {
-            String name = String.valueOf(iterator.next());
-            System.out.println("This is using FIFO implementation " + name);
+        if (nextPerson != null) {
+
+            Map<String, List<Book>> booksOnShelf = library.getBookOnShelf();
+            Book availableBook = null;
+
+            for (List<Book> bookList : booksOnShelf.values()) {
+                for (Book book : bookList) {
+                    if (book.getCopies() > 0) {
+                        availableBook = book;
+                        break;
+                    }
+                }
+                if (availableBook != null) {
+                    break;
+                }
+            }
+            if (availableBook != null) {
+                new BookServiceImpl().removeCopy(availableBook);
+                System.out.printf("Book ID: %d titled '%s' has been given to %s %s, the %s.%n",
+                        availableBook.getId(),
+                        availableBook.getBookTitle(),
+                        nextPerson.getFirstName(),
+                        nextPerson.getLastName(),
+                        nextPerson.getRole()
+                );
+            } else {
+                System.out.println("No available book to give to " + nextPerson.getFirstName() + ".");
+            }
+        } else {
+            System.out.println("No one is in the queue to receive a book.");
+        }
+
+        for (Person p : queue) {
+            System.out.println("This is using FIFO implementation: " + p.getFirstName() + " " + p.getLastName());
         }
     }
 
@@ -100,6 +134,4 @@ public class LibraryServiceImpl implements LibraryService {
         return "Book Id : " + bookId + " with title " + availableBook.getBookTitle() + " has been given to " + nextPersonOnQueue.getFirstName() + " " + nextPersonOnQueue.getLastName() +
                 " and the " + nextPersonOnQueue.getRole() + " by the " + librarian.getFirstName() + " " + librarian.getLastName() + " who is the " + librarian.getRole();
     }
-
-
 }

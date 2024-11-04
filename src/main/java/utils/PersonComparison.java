@@ -5,7 +5,7 @@ import enums.Role;
 
 import java.util.Comparator;
 
-public class PersonCompasion implements Comparator<Person> {
+public class PersonComparison implements Comparator<Person> {
 
     @Override
     public int compare(Person p1, Person p2) {

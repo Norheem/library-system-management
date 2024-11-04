@@ -1,7 +1,7 @@
 package model;
 
 import baseClass.Person;
-import utils.PersonCompasion;
+import utils.PersonComparison;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ public class Library {
     //Create a priority queue for person on the queue
     PriorityQueue<Person> personOnQueue;
 
-    private List<Person> listUsingFifo;
+    private final Queue<Person> useFifoToAssignBook;
 
 
     //Create a Set to track if book already exist in library
@@ -22,8 +22,8 @@ public class Library {
     // Create a library constructor
     public Library() {
         bookOnShelf = new HashMap<>();
-        personOnQueue = new PriorityQueue<>(new PersonCompasion());
-        listUsingFifo = new ArrayList<>();
+        personOnQueue = new PriorityQueue<>(new PersonComparison());
+        useFifoToAssignBook = new LinkedList<>();
     }
 
     // Create Getter for book on shelf
@@ -42,8 +42,8 @@ public class Library {
     }
 
     // Create getter for FiFo
-    public List<Person> getListUsingFifo() {
-        return listUsingFifo;
+    public Queue<Person> getListUsingFifo() {
+        return useFifoToAssignBook;
     }
 
 }
